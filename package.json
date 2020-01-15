@@ -13,6 +13,7 @@
     "@material-ui/icons": "^4.5.1",
     "clsx": "latest",
     "react": "latest",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "latest",
     "react-router-dom": "^5.1.2",
     "react-scripts": "latest"

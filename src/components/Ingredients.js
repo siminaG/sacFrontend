@@ -10,8 +10,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -21,13 +19,10 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Paper from '@material-ui/core/Paper';
 
 
 const useStyles = makeStyles(theme => ({
@@ -83,14 +78,13 @@ function Ingredients () {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [state, setState] = React.useState({
-        category: [{'Meat': false}, {'Vegetables': false}, {'Fruits': false}, {'Dairy': false}, {'Grains': false}, {'Spices': false}, {'Fish and seafood': false}, {'Oils': false}, {'Condiments': false}, {'Added Sweeteners': false}, {'Baking': false}],
+        category: [{'Meat': false}, {'Vegetables': false}, {'Fruits': false}, {'Dairy': false}, {'Grains': false}, {'Spices': false}, {'Fish and seafood': false},  {'Condiments': false}, {'Added Sweeteners': false}, {'Baking': false}],
         ingredients: [{
             "pork": false,
-            "chicken breast": false, 
+            "chicken": false,
             "beef": false,
             "bacon": false,
             "turkey": false,
-            "chicken": false,
             "lamb": false,
             "prosciutto": false,
             "duck": false,
@@ -101,14 +95,13 @@ function Ingredients () {
             "potato": false,
             "garlic": false,
             "carrot": false,
-            "bell pepper": false,
+            "pepper": false,
             "broccoli": false,
             "corn": false,
             "spinach": false,
             "mushroom": false,
             "green beans": false,
             "ginger": false,
-            "chilli pepper": false,
             "celery": false,
             "salad": false,
             "red onion": false,
@@ -120,7 +113,6 @@ function Ingredients () {
             "olive": false,
             "cabbage": false,
             "cauliflower": false,
-            "sun dried tomato": false,
             "eggplant": false,
             "butternut squash": false,
             "sweet pepper": false
@@ -174,6 +166,7 @@ function Ingredients () {
             "parsley": false,
             "basil": false,
             "rosmarine": false,
+            "oil": false,
             "cacao": false,
             "herbs": false,
             "vanilla": false,
@@ -192,27 +185,16 @@ function Ingredients () {
             "mussel": false
         },
         {
-            "olive oil": false,
-            "vegetable oil": false, 
-            "coconut oil": false,
-            "sunflower oil": false,
-            "corn oil": false,
-            "palm oil": false
-        },
-        {
             "mayonnaise": false,
             "ketchup": false, 
             "mustard": false,
             "soy sauce": false,
-            "balsamic vinegar": false,
+            "vinegar": false,
             "hot sauce": false,
-            "wine vinegar": false,
-            "apple cider vinegar": false,
             "teriyaki": false
         },
         {
             "sugar": false,
-            "brown sugar": false, 
             "honey": false,
             "maple syrup": false,
             "agave nectar": false
@@ -236,8 +218,20 @@ function Ingredients () {
 
         category[i][name] = !category[i][name];
         setState({ ...state, category:  category});
-    }
+    };
 
+    const ingredientList = () => {
+        let ingrSelection = state.ingredients;
+        let result = [];
+        ingrSelection.forEach((category) => {
+            for (let key in category) {
+                if (category.hasOwnProperty(key) && category[key] === true) {
+                    result.push(key);
+                }
+            }
+        });
+        return result;
+    };
 
     const ingredients = (ingredients, categoryIndex) => Object.keys(ingredients).map((ingredient, value) => {
         const labelId = `checkbox-list-secondary-label-${value}`;
@@ -260,7 +254,7 @@ function Ingredients () {
     const category = state.category.map((categ, categoryIndex) => {
         let key = Object.keys(categ)[0];
         return (
-            <React.Fragment>
+            <React.Fragment key={key}>
             <ListItem button onClick={handleClick(key, categoryIndex)} key={key}>
                 <ListItemText primary={key} />
                 {categ[key] ? <ExpandLess /> : <ExpandMore />}
@@ -275,11 +269,28 @@ function Ingredients () {
     });
 
     
-const continueToRecipes = () => {
-    history.push({
-        pathname: '/recipes',
-        state: state
-    });
+const continueToRecipes = (event) => {
+    event.preventDefault();
+    let list = ingredientList();
+    let email = localStorage.getItem('email');
+    fetch('http://localhost:5000/ingredients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([list, email])
+    })
+        .then(response => {
+            if(response.status === 200){console.log(response.json())}
+                // history.push({
+                //         pathname: '/recipes',
+                //         state: state,
+                //         // recipes: response.body
+                // });
+        });
+    // history.push({
+    //     pathname: '/recipes',
+    //     state: state
+    // });
+    // console.log(ingredientList())
 }
 
 const handleMenu = event => {

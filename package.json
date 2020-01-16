@@ -16,9 +16,11 @@
     "react": "latest",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "latest",
+    "react-loader-spinner": "^3.1.5",
+    "react-promise-tracker": "^2.0.5",
+    "react-router": "latest",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "latest",
-    "react-router": "latest"
+    "react-scripts": "latest"
   },
   "browserslist": {
     "production": [

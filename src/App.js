@@ -5,9 +5,7 @@ import Ingredients from "./components/Ingredients";
 import {
     BrowserRouter as Router,
     Route,
-    Switch,
-    Link,
-    Redirect
+    Switch
 } from 'react-router-dom';
 
 function App() {

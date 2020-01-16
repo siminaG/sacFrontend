@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { useLocation} from "react-router";
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
@@ -11,7 +10,10 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    display: 'flex',
     flexGrow: 1,
+    width: '95%',
+    height: '95%'
   },
 
   paper: {
@@ -45,36 +47,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Recipes() {
+function Recipes(props) {
   const classes = useStyles();
-  const recipes = [{
-    name: 'full meat',
-    ingredients: ["pork", "chicken breast", "beef", "bacon", "turkey"]
-  }, {
-    name: 'full meat',
-    ingredients: ["pork", "chicken breast", "beef", "bacon", "turkey"]
-  },
-  {
-    name: 'full meat',
-    ingredients: ["pork", "chicken breast", "beef", "bacon", "turkey"]
-  },
-  {
-    name: 'full meat',
-    ingredients: ["pork", "chicken breast", "beef", "bacon", "turkey"]
-  },
-  {
-    name: 'full meat',
-    ingredients: ["pork", "chicken breast", "beef", "bacon", "turkey"]
-  },
-  {
-    name: 'full meat',
-    ingredients: ["pork", "chicken breast", "beef", "bacon", "turkey"]
-  },
-  {
-    name: 'full meat',
-    ingredients: ["pork", "chicken breast", "beef", "bacon", "turkey"]
-  }];
-  console.table(useLocation().state);
 
   function Ingredients(props) {
     
@@ -88,9 +62,10 @@ function Recipes() {
       </div>
     )
   }
+
   function FormRow() {
 
-    let recipiesHtml = recipes.map(function (recipe) { 
+    let recipiesHtml = props.recipes.map(function (recipe) {
         return (
         <Grid item xs={4}>
           <Grid
@@ -135,13 +110,12 @@ function Recipes() {
   return (
     <div className={classes.root}>
       <Grid container spacing={1}>
-        <Grid container item xs={12} spacing={3} className={classes.correctMargin}>
+        <Grid container item xs={12} spacing={1} className={classes.correctMargin}>
           <FormRow />
         </Grid>
       </Grid>
     </div>
   );
 }
-
 
 export default Recipes;

@@ -1,7 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import List from '@material-ui/core/List';
@@ -13,21 +11,13 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {useHistory} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import Recipes from "./Recipes";
 
 
 const useStyles = makeStyles(theme => ({
     root: {
-        display: 'flex-start',
+        display: 'flex',
         backgroundImage: 'url(https://marketplace.canva.com/MADGvgHETXk/7/screen_2x/canva-apricot-fruits-on-bowl-MADGvgHETXk.jpg)',
         backgroundRepeat: 'no-repeat',
         backgroundColor:
@@ -35,37 +25,14 @@ const useStyles = makeStyles(theme => ({
         backgroundSize: 'cover',
         backgroundPosition: 'inherit',
         opacity: '0.9',
-
+        height: '100vh'
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
-      },
-      title: {
-        flexGrow: 1,
-      },
 
     formControl: {
+        margin: theme.spacing(2),
         display: 'flex',
-        // marginBottom: theme.spacing(30)
-        // padding: theme.spacing(2),
         backgroundColor: '#E9FFED ',
-        opacity: '0.7',
-    },
-
-    button: {
-        marginLeft: theme.spacing(10),
-        padding: theme.spacing(3),
-    },
-
-    designCateg: {
-        marginTop: theme.spacing(5),
-        marginLeft: theme.spacing(15),
-        // marginBottom: theme.spacing(5),
-        position: 'relative',
-        // overflow: 'hidden',
-        
-        
-        // overflow: 'scroll',
+        opacity: '0.7'
     }
 
 }));
@@ -73,13 +40,11 @@ const useStyles = makeStyles(theme => ({
 
 function Ingredients () {
 
-    let history = useHistory();
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
     const [state, setState] = React.useState({
         category: [{'Meat': false}, {'Vegetables': false}, {'Fruits': false}, {'Dairy': false}, {'Grains': false}, {'Spices': false}, {'Fish and seafood': false},  {'Condiments': false}, {'Added Sweeteners': false}, {'Baking': false}],
-        ingredients: [{
+        ingredients: [
+            {
             "pork": false,
             "chicken": false,
             "beef": false,
@@ -89,9 +54,10 @@ function Ingredients () {
             "prosciutto": false,
             "duck": false,
             "goose": false
-        }, {
-            "tomato": false, 
-            "onion": false, 
+        },
+        {
+            "tomato": false,
+            "onion": false,
             "potato": false,
             "garlic": false,
             "carrot": false,
@@ -116,9 +82,10 @@ function Ingredients () {
             "eggplant": false,
             "butternut squash": false,
             "sweet pepper": false
-        }, {
-            "apple": false, 
-            "banana": false, 
+        },
+        {
+            "apple": false,
+            "banana": false,
             "orange": false,
             "lemon": false,
             "lime": false,
@@ -136,7 +103,7 @@ function Ingredients () {
         },
         {
             "butter": false,
-            "egg": false, 
+            "egg": false,
             "milk": false,
             "parmesan": false,
             "cheddar": false,
@@ -151,13 +118,13 @@ function Ingredients () {
         },
         {
             "bread": false,
-            "pasta": false, 
+            "pasta": false,
             "rice": false,
             "cereals": false
         },
         {
             "cumin": false,
-            "thyme": false, 
+            "thyme": false,
             "oregano": false,
             "salt": false,
             "pepper": false,
@@ -174,7 +141,7 @@ function Ingredients () {
         },
         {
             "canned tuna": false,
-            "salmon": false, 
+            "salmon": false,
             "cod": false,
             "anchovy": false,
             "shrimp": false,
@@ -186,7 +153,7 @@ function Ingredients () {
         },
         {
             "mayonnaise": false,
-            "ketchup": false, 
+            "ketchup": false,
             "mustard": false,
             "soy sauce": false,
             "vinegar": false,
@@ -201,9 +168,10 @@ function Ingredients () {
         },
         {
             "flour": false,
-            "baking powder": false, 
+            "baking powder": false,
             "baking soda": false
-        }]
+        }],
+        recipes : []
     });
 
     const handleToggle = (categoryIndex, ingredientsKey) => _ => {
@@ -268,122 +236,48 @@ function Ingredients () {
       )
     });
 
-    
-const continueToRecipes = (event) => {
-    event.preventDefault();
-    let list = ingredientList();
-    let email = localStorage.getItem('email');
-    fetch('http://localhost:5000/ingredients', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify([list, email])
-    })
-        .then(response => {
-            if(response.status === 200){console.log(response.json())}
-                // history.push({
-                //         pathname: '/recipes',
-                //         state: state,
-                //         // recipes: response.body
-                // });
-        });
-    // history.push({
-    //     pathname: '/recipes',
-    //     state: state
-    // });
-    // console.log(ingredientList())
-}
+    const getRecipes = (event) => {
+        event.preventDefault();
+        let list = ingredientList();
+        let email = localStorage.getItem('email');
+        fetch('http://localhost:5000/ingredients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify([list, email])
+        })
+            .then(response => response.json())
+            .then(response => {
+                let newRecipes = [];
+                response.forEach(recipe => newRecipes.push({
+                    name: recipe.Title,
+                    ingredients: recipe.Ingredients.replace(/['[\]]/g, "").split(','),
+                    timeToCook: recipe.Time_to_Cook}));
+                setState({...state, recipes: newRecipes})
+            });
 
-const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+    };
 
     return (
-     
-    <div className = {classes.root}>  
-     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-          </Typography>
-          <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>My Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My Recipes</MenuItem>
-              </Menu>
-            </div>
-        </Toolbar>
-      </AppBar>
-    </div>
-
-    <div className = {classes.designCateg}> 
-     <Grid
-        container 
-        direction="column"
-        justify="center"
-        alignItems="flex-start"
-    >   
-   <Grid item xs = {30}>
-    <div className = {classes.formControl}>
-    <FormControl component="fieldset" >
-        <FormLabel>Select the desired ingredients:</FormLabel>
-        <Scrollbars style={{ width: 300, height: 500 }}>
-        <FormGroup>
-            <List
-                component="nav"
-                aria-labelledby="nested-list-subheader">
-                {category}
-            </List>
-            </FormGroup>
-            </Scrollbars>
-        </FormControl>
-        </div>
+        <Grid container component="main" className={classes.root}>
+            <Grid container item xs={3}>
+                <Grid item xs={12}>
+                    <div className={classes.formControl}>
+                        <Scrollbars style={{ width: '100%', height: 500 }}>
+                            <FormGroup>
+                                <List component="nav" aria-labelledby="nested-list-subheader">{category}</List>
+                            </FormGroup>
+                        </Scrollbars>
+                    </div>
+                </Grid>
+                <Grid item xs={12} style={{ textAlign: 'center'}}>
+                    <Button variant="contained" color="primary" onClick={getRecipes}>Continue</Button>
+                </Grid>
+            </Grid>
+            <Grid container item xs={9}>
+                <Recipes recipes={state.recipes}/>
+            </Grid>
         </Grid>
-      <Grid item xs={10}>
-        <div className = {classes.button}>
-        <Button variant="contained" color="primary" onClick = {continueToRecipes}>
-        Continue
-        </Button> 
-      </div>
-    </Grid>
-    </Grid>
-    </div>
-    
-    
-    </div> 
-    
-    )
+    );
 }
-
 
 export default Ingredients;
